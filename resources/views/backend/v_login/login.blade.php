@@ -2,6 +2,7 @@
 <html dir="ltr">
 
 <head>
+    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
@@ -9,8 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{
-asset('image/icon_univ_bsi.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('image/icon_univ_bsi.png') }}">
     <title>tokoonline</title>
     <!-- Custom CSS -->
     <link href="{{ asset('backend/dist/css/style.min.css') }}" rel="stylesheet">
@@ -43,10 +43,11 @@ asset('image/icon_univ_bsi.png') }}">
             <div class="auth-box bg-dark border-top border-secondary">
                 <div id="loginform">
                     <div class="text-center p-t-20 p-b-20">
-                        <span class="db"><img src="assets/images/logo.png" alt="logo" /></span>
+                    <span class="db"><img src="{{ asset('image/logo.png') }}" alt="logo"/></span>
                     </div>
                     <!-- Form -->
-                    <form class="form-horizontal m-t-20" id="loginform" action="index.html">
+                    <form class="form-horizontal m-t-20" id="loginform" action="{{ route('backend.login') }}" method="post">
+
                         <div class="row p-b-30">
                             <div class="col-12">
                                 <div class="input-group mb-3">
