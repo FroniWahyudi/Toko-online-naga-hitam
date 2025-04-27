@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/icon_univ_bsi.png') }}">
     <title>Matrix Template - The Ultimate Multipurpose admin template</title>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('assets/extra-libs/multicheck/multicheck.css') }}">
@@ -53,14 +53,14 @@
                         <b class="logo-icon p-l-10">
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                             <!-- Dark Logo icon -->
-                            <img src="{{ asset('assets/images/logo-icon.png') }}" alt="homepage" class="light-logo" />
+                            <img src="{{ asset('assets/images/icon_univ_bsi.png') }}" alt="homepage" class="light-logo" />
                            
                         </b>
                         <!--End Logo icon -->
                          <!-- Logo text -->
                         <span class="logo-text">
                              <!-- dark Logo text -->
-                             <img src="{{ asset('assets/images/logo-text.png') }}" alt="homepage" class="light-logo" />
+                             <img src="{{ asset('assets/images/logo_text.png') }}" alt="homepage" class="light-logo" />
                             
                         </span>
                         <!-- Logo icon -->
