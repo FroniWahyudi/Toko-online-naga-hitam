@@ -24,7 +24,7 @@
             <div class="auth-box bg-dark border-top border-secondary">
                 <div id="loginbox">
                     <div class="text-center p-t-20 p-b-20">
-                        <span class="db"><img src="{{ asset('image/logo.png') }}" alt="logo" /></span>
+                        <span class="db"><img src="{{ asset('image/icon_univ_bsi.png') }}" alt="logo" /></span>
                     </div>
 
                     <!-- Tampilkan Pesan Error -->
