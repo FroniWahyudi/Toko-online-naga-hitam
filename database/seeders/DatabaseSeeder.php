@@ -29,5 +29,14 @@ class DatabaseSeeder extends Seeder
             'hp' => '081234567892',
             'password' => bcrypt('P@55word'),
         ]);
+
+        User::create([
+            'nama' => 'Froni Wahyudi',
+            'email' => 'froniwahyudi@gmail.com',
+            'role' => '0',
+            'status' => 1,
+            'hp' => '081234567892',
+            'password' => bcrypt('froni123'),
+        ]);
     }
 }
