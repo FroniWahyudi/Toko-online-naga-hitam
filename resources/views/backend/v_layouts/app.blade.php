@@ -74,10 +74,10 @@ class="light-logo" /> -->
 <!-- </b> -->
 <!--End Logo icon -->
 </a>
-                  <!-- ============================================================== -->
+<!-- ============================================================== -->
 <!-- End Logo -->
 <!-- ============================================================== -->
-<!-- ============================================================== -->
+ <!-- ============================================================== -->
 <!-- Toggle which is visible on mobile only -->
 <!-- ============================================================== -->
 <a class="topbartoggler d-block d-md-none waves-effect waves-light"
@@ -133,9 +133,9 @@ sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebart
 <!-- ==============================================================
 -->
 <!-- User profile and search -->
-                        <!-- ==============================================================
+<!-- ==============================================================
 -->
-<li class="nav-item dropdown">
+<li class="nav-item dropdown"></li>
 <a class="nav-link dropdown-toggle text-muted waves-effect
 waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" ariaexpanded="false"><img src="assets/images/users/1.jpg" alt="user" class="rounded-circle"
 width="31"></a>
@@ -197,7 +197,7 @@ class="sidebar-link"><i class="mdi mdi-chevron-right"></i><span class="hide-menu
 <!-- End Sidebar scroll-->
 </aside>
 <!-- ============================================================== -->
-<!-- End Left Sidebar - style you can find in sidebar.scss -->
+ <!-- End Left Sidebar - style you can find in sidebar.scss -->
 <!-- ============================================================== -->
 <!-- ============================================================== -->
 <!-- Page wrapper -->
@@ -206,21 +206,6 @@ class="sidebar-link"><i class="mdi mdi-chevron-right"></i><span class="hide-menu
 <!-- ============================================================== -->
 <!-- Bread crumb and right sidebar toggle -->
 <!-- ============================================================== -->
-<div class="page-breadcrumb">
-<div class="row">
-<div class="col-12 d-flex no-block align-items-center">
-<h4 class="page-title">Tables</h4>
-<div class="ml-auto text-right">
-<nav aria-label="breadcrumb">
-<ol class="breadcrumb">
-<li class="breadcrumb-item"><a href="#">Home</a></li>
-<li class="breadcrumb-item active" ariacurrent="page">Library</li>
-</ol>
-</nav>
-</div>
-</div>
-</div>
-</div>
 <!-- ============================================================== -->
 <!-- End Bread crumb and right sidebar toggle -->
 <!-- ============================================================== -->
@@ -234,8 +219,6 @@ class="sidebar-link"><i class="mdi mdi-chevron-right"></i><span class="hide-menu
 <!-- @yieldAwal -->
 @yield('content')
 <!-- @yieldAkhir-->
-
-
 <!-- ============================================================== -->
 <!-- End PAge Content -->
 <!-- ============================================================== -->
@@ -301,7 +284,6 @@ $('#zero_config').DataTable();
 @csrf
 </form>
 <!-- form keluar app end -->
-
 <!-- sweetalert -->
 <script src="{{ asset('sweetalert/sweetalert2.all.min.js') }}"></script>
 <!-- sweetalert End -->
@@ -316,6 +298,30 @@ text: "{{ session('success') }}"
 </script>
 @endif
 <!-- konfirmasi success End-->
+<script type="text/javascript">
+//Konfirmasi delete
+$('.show_confirm').click(function(event) {
+var form = $(this).closest("form");
+var konfdelete = $(this).data("konf-delete");
+event.preventDefault();
+Swal.fire({
+title: 'Konfirmasi Hapus Data?',
+html: "Data yang dihapus <strong>" + konfdelete + "</strong> tidak dapat dikembalikan!",
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Ya, dihapus',
+cancelButtonText: 'Batal'
+}).then((result) => {
+if (result.isConfirmed) {
+Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success')
+.then(() => {
+form.submit();
+});
+}
+});
+});
+</script>
 </body>
-
 </html>

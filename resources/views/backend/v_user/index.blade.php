@@ -55,8 +55,8 @@ title="Ubah Data">
 route('backend.user.destroy', $row->id) }}" style="display: inline-block;">
 @method('delete')
 @csrf
-<button type="submit" class="btn btn-danger btn-sm"
-title='Hapus Data'>
+<button type="submit" class="btn btn-danger btn-sm
+show_confirm" data-konf-delete="{{ $row->nama }}" title='Hapus Data'>
 <i class="fas fa-trash"></i> Hapus</button>
 </form>
 </td>
