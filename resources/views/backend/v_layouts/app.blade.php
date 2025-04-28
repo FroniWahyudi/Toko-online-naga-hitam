@@ -24,7 +24,7 @@ asset('image/icon_univ_bsi.png') }}">
 <![endif]-->
 </head>
 <body>
-<!-- ============================================================== -->
+    <!-- ============================================================== -->
 <!-- Preloader - style you can find in spinners.css -->
 <!-- ============================================================== -->
 <div class="preloader">
@@ -61,7 +61,7 @@ alt="homepage" class="light-logo" />
 <!-- Logo text -->
 <span class="logo-text">
 <!-- dark Logo text -->
-<img src="{{ asset('image/logo_text_projek.png') }}" alt="homepage"
+<img src="{{ asset('image/logo_text.png') }}" alt="homepage"
 class="light-logo" />
 </span>
 <!-- Logo icon -->
@@ -77,7 +77,7 @@ class="light-logo" /> -->
 <!-- ============================================================== -->
 <!-- End Logo -->
 <!-- ============================================================== -->
- <!-- ============================================================== -->
+<!-- ============================================================== -->
 <!-- Toggle which is visible on mobile only -->
 <!-- ============================================================== -->
 <a class="topbartoggler d-block d-md-none waves-effect waves-light"
@@ -86,7 +86,7 @@ aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle
 navigation"><i class="ti-more"></i></a>
 </div>
 <!-- ============================================================== -->
-<!-- End Logo -->
+ <!-- End Logo -->
 <!-- ============================================================== -->
 <div class="navbar-collapse collapse" id="navbarSupportedContent" datanavbarbg="skin5">
 <!-- ============================================================== -->
@@ -135,14 +135,21 @@ sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebart
 <!-- User profile and search -->
 <!-- ==============================================================
 -->
-<li class="nav-item dropdown"></li>
+<li class="nav-item dropdown">
 <a class="nav-link dropdown-toggle text-muted waves-effect
-waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" ariaexpanded="false"><img src="assets/images/users/1.jpg" alt="user" class="rounded-circle"
-width="31"></a>
+waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" ariaexpanded="false">
+@if (Auth::user()->foto)
+<img src="{{ asset('storage/img-user/' . Auth::user()->foto) }}" alt="user" class="rounded-circle" width="31">
+@else
+<img src="{{ asset('storage/img-user/img-default.jpg') }}"
+alt="user" class="rounded-circle" width="31">
+@endif
+</a>
 <div class="dropdown-menu dropdown-menu-right user-dd
 animated">
-<a class="dropdown-item" href="javascript:void(0)"><i
-class="ti-user m-r-5 m-l-5"></i> Profil Saya</a>
+<a class="dropdown-item" href="{{
+route('backend.user.edit', Auth::user()->id) }}"><i class="ti-user m-r-5 m-l-5"></i> Profil
+Saya</a>
 <a class="dropdown-item" href=""
 onclick="event.preventDefault(); document.getElementById('keluar-app').submit();"><i
 class="fa fa-power-off m-r-5 m-l-5"></i> Keluar</a>
@@ -197,8 +204,8 @@ class="sidebar-link"><i class="mdi mdi-chevron-right"></i><span class="hide-menu
 <!-- End Sidebar scroll-->
 </aside>
 <!-- ============================================================== -->
- <!-- End Left Sidebar - style you can find in sidebar.scss -->
-<!-- ============================================================== -->
+<!-- End Left Sidebar - style you can find in sidebar.scss -->
+ <!-- ============================================================== -->
 <!-- ============================================================== -->
 <!-- Page wrapper -->
 <!-- ============================================================== -->
