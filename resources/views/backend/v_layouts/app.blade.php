@@ -175,7 +175,8 @@ waves-dark sidebar-link" href="{{ route('backend.beranda') }}" aria-expanded="fa
 class="mdi mdi-view-dashboard"></i><span class="hide-menu">Beranda</span></a>
 </li>
 <li class="sidebar-item"> <a class="sidebar-link waves-effect
-waves-dark sidebar-link" href="charts.html" aria-expanded="false"><i class="mdi mdiaccount"></i><span class="hide-menu">User</span></a>
+waves-dark sidebar-link" href="{{ route('backend.user.index') }}" aria-expanded="false"><i
+class="mdi mdi-account"></i><span class="hide-menu">User</span></a>
 </li>
 <li class="sidebar-item"> <a class="sidebar-link has-arrow waveseffect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdishopping"></i><span class="hide-menu">Data Produk </span></a>
 <ul aria-expanded="false" class="collapse first-level">
