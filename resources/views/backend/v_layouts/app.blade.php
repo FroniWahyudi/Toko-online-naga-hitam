@@ -301,6 +301,21 @@ $('#zero_config').DataTable();
 @csrf
 </form>
 <!-- form keluar app end -->
+
+<!-- sweetalert -->
+<script src="{{ asset('sweetalert/sweetalert2.all.min.js') }}"></script>
+<!-- sweetalert End -->
+<!-- konfirmasi success-->
+@if (session('success'))
+<script>
+Swal.fire({
+icon: 'success',
+title: 'Berhasil!',
+text: "{{ session('success') }}"
+});
+</script>
+@endif
+<!-- konfirmasi success End-->
 </body>
 
 </html>
