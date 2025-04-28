@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers\ImageHelper;
-
+use Illuminate\Support\Facades\Storage;
 
 
 class UserController extends Controller
@@ -110,47 +110,61 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-    //ddd($request);
-    $user = User::findOrFail($id);
-    $rules = [
-    'nama' => 'required|max:255',
-    'role' => 'required',
-    'status' => 'required',
-    'hp' => 'required|min:10|max:13',
-    'foto' => 'image|mimes:jpeg,jpg,png,gif|file|max:1024',
-    ];
-    $messages = [
-    'foto.image' => 'Format gambar gunakan file dengan ekstensi jpeg, jpg, png,
-    atau gif.',
-    'foto.max' => 'Ukuran file gambar Maksimal adalah 1024 KB.'
-    ];
-    if ($request->email != $user->email) {
-    $rules['email'] = 'required|max:255|email|unique:user';
+        $user = User::findOrFail($id);
+    
+        // Aturan validasi
+        $rules = [
+            'nama'   => 'required|max:255',
+            'role'   => 'required',
+            'status' => 'required',
+            'hp'     => 'required|min:10|max:13',
+            // foto boleh kosong, tapi kalau ada harus gambar dan max 1MB
+            'foto'   => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
+        ];
+    
+        // Jika email diubah, tambahkan rule unique
+        if ($request->email !== $user->email) {
+            $rules['email'] = "required|email|max:255|unique:users,email,{$user->id}";
+        }
+    
+        // Pesan kustom
+        $messages = [
+            'foto.image' => 'Format gambar harus jpeg, jpg, png, atau gif.',
+            'foto.max'   => 'Ukuran maksimum gambar adalah 1024 KB.',
+            'email.unique' => 'Email sudah dipakai oleh user lain.',
+        ];
+    
+        // Validasi
+        $validated = $request->validate($rules, $messages);
+    
+        // Kalau ada upload foto baru
+        if ($request->hasFile('foto')) {
+            // Hapus gambar lama
+            if ($user->foto && Storage::disk('public')->exists("img-user/{$user->foto}")) {
+                Storage::disk('public')->delete("img-user/{$user->foto}");
+            }
+    
+            $file = $request->file('foto');
+            $filename = now()->format('YmdHis') . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+    
+            // Simpan & resize, misal pakai helper atau langsung store
+            // Contoh pakai Storage saja (tanpa resize):
+            $file->storeAs('img-user', $filename, 'public');
+    
+            // Jika mau resize, panggil ImageHelper setelah store
+            // ImageHelper::uploadAndResize($file, 'storage/img-user/', $filename, 385, 400);
+    
+            $validated['foto'] = $filename;
+        }
+    
+        // Update data
+        $user->update($validated);
+    
+        return redirect()
+            ->route('backend.user.index')
+            ->with('success', 'Data berhasil diperbaharui.');
     }
-    $validatedData = $request->validate($rules, $messages);
-    // menggunakan ImageHelper
-    if ($request->file('foto')) {
-    //hapus gambar lama
-    if ($user->foto) {
-    $oldImagePath = public_path('storage/img-user/') . $user->foto;
-    if (file_exists($oldImagePath)) {
-    unlink($oldImagePath);
-    }
-    }
-    $file = $request->file('foto');
-    $extension = $file->getClientOriginalExtension();
-    $originalFileName = date('YmdHis') . '_' . uniqid() . '.' . $extension;
-    $directory = 'storage/img-user/';
-    // Simpan gambar dengan ukuran yang ditentukan
-    ImageHelper::uploadAndResize($file, $directory, $originalFileName, 385, 400);
-    // null (jika tinggi otomatis)
-    // Simpan nama file asli di database
-    $validatedData['foto'] = $originalFileName;
-    }
-    $user->update($validatedData);
-    return redirect()->route('backend.user.index')->with('success', 'Data berhasil
-    diperbaharui');
-    }
+    
     
 
     /**
