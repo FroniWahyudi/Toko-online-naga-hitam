@@ -61,7 +61,7 @@ alt="homepage" class="light-logo" />
 <!-- Logo text -->
 <span class="logo-text">
 <!-- dark Logo text -->
-<img src="{{ asset('image/logo_text.png') }}" alt="homepage"
+<img src="{{ asset('image/logo_text_projek.png') }}" alt="homepage"
 class="light-logo" />
 </span>
 <!-- Logo icon -->
