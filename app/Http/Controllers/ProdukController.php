@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Produk;
 
 class ProdukController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
+   public function index()
+{
+$produk = Produk::orderBy('updated_at', 'desc')->get(); return view('backend.v_produk.index', [
+'judul' => 'Data Produk', 'index' => $produk
+]);
+}
 
     /**
      * Show the form for creating a new resource.
