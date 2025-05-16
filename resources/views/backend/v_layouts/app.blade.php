@@ -200,5 +200,8 @@
       .create(document.querySelector('#ckeditor'))
       .catch(error => { console.error(error); });
   </script>
+      {{-- Render semua @push('scripts') dari child views --}}
+    @stack('scripts')
+
 </body>
 </html>

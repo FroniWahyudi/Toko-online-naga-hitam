@@ -41,7 +41,7 @@
                                     @else
                                         <img src="{{ asset('storage/img-user/img-default.jpg') }}" class="foto-preview mb-2" width="100%">
                                     @endif
-                                    <input type="file" name="foto" class="form-control @error('foto') is-invalid @enderror" onchange="previewFoto()">
+                                    <input type="file" name="foto" class="form-control @error('foto') is-invalid @enderror" onchange="previewoto()">
                                     @error('foto')
                                         <div class="invalid-feedback alert-danger">{{ $message }}</div>
                                     @enderror
@@ -105,3 +105,20 @@
 </div>
 <!-- contentAkhir -->
 @endsection
+@push('scripts')
+<script>
+  function previewfoto() {
+    // ambil elemen input dan preview
+    const input = document.querySelector('input[name="foto"]');
+    const img   = document.querySelector('.foto-preview');
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.readAsDataURL(input.files[0]);
+      reader.onload = e => {
+        img.src = e.target.result;
+        img.style.display = 'block'; // jika semula pakai display:none
+      };
+    }
+  }
+</script>
+@endpush

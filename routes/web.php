@@ -6,25 +6,40 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\ProdukController;
-use App\Http\Controllers\FotoProdukController; // ✅ Tambahkan ini
 
+// Redirect root ke halaman login backend
 Route::get('/', function () {
     return redirect()->route('backend.login');
 });
 
-// Login & Logout
+// 🔐 Login & Logout
 Route::get('backend/login', [LoginController::class, 'loginBackend'])->name('backend.login');
 Route::post('backend/login', [LoginController::class, 'authenticateBackend'])->name('backend.login.submit');
 Route::post('backend/logout', [LoginController::class, 'logoutBackend'])->name('backend.logout');
-Route::get('login', fn() => redirect()->route('backend.login'))->name('login');
 
-// ✅ Route Beranda (Dashboard)
-Route::get('backend/beranda', [BerandaController::class, 'index'])
-    ->middleware('auth')
-    ->name('backend.beranda');
+// 🏠 Beranda
+Route::get('backend/beranda', [BerandaController::class, 'berandaBackend'])
+    ->name('backend.beranda')
+    ->middleware('auth');
 
-// Resource dengan middleware auth
-Route::resource('backend/user', UserController::class, ['as' => 'backend'])->middleware('auth');
-Route::resource('backend/kategori', KategoriController::class, ['as' => 'backend'])->middleware('auth');
-Route::resource('backend/produk', ProdukController::class, ['as' => 'backend'])->middleware('auth');
-Route::resource('backend/foto_produk', FotoProdukController::class, ['as' => 'backend'])->middleware('auth'); // ✅ Ini yang ditambahkan
+// 👤 Manajemen User
+Route::resource('backend/user', UserController::class, ['as' => 'backend'])
+    ->middleware('auth');
+
+// 🗂️ Manajemen Kategori
+Route::resource('backend/kategori', KategoriController::class, ['as' => 'backend'])
+    ->middleware('auth');
+
+// 📦 Manajemen Produk
+Route::resource('backend/produk', ProdukController::class, ['as' => 'backend'])
+    ->middleware('auth');
+
+// 📸 Tambah Foto Produk
+Route::post('backend/foto-produk/store', [ProdukController::class, 'storeFoto'])
+    ->name('backend.foto_produk.store')
+    ->middleware('auth');
+
+// ❌ Hapus Foto Produk
+Route::delete('backend/foto-produk/{id}', [ProdukController::class, 'destroyFoto'])
+    ->name('backend.foto_produk.destroy')
+    ->middleware('auth');

@@ -1,7 +1,6 @@
 @extends('backend.v_layouts.app')
 
 @section('content')
-<!-- contentAwal -->
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -14,105 +13,155 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label>Kategori</label>
-                <select name="kategori_id" class="form-control @error('kategori_id') is-invalid @enderror" disabled>
-                  <option value="" selected> - Pilih Kategori - </option>
-                  @foreach ($kategori as $row)
-                    <option value="{{ $row->id }}" {{ old('kategori_id', $show->kategori_id) == $row->id ? 'selected' : '' }}>
+                <select class="form-control" disabled>
+                  <option>- Pilih Kategori -</option>
+                  @foreach($kategori as $row)
+                    <option value="{{ $row->id }}"
+                      {{ $show->kategori_id == $row->id ? 'selected' : '' }}>
                       {{ $row->nama_kategori }}
                     </option>
                   @endforeach
                 </select>
-                @error('kategori_id')
-                  <span class="invalid-feedback alert-danger" role="alert"> {{ $message }} </span>
-                @enderror
               </div>
-
               <div class="form-group">
                 <label>Nama Produk</label>
-                <input type="text" name="nama_produk" value="{{ old('nama_produk', $show->nama_produk) }}"
-                  class="form-control @error('nama_produk') is-invalid @enderror" placeholder="Masukkan Nama Produk" disabled>
-                @error('nama_produk')
-                  <span class="invalid-feedback alert-danger" role="alert"> {{ $message }} </span>
-                @enderror
+                <input type="text" class="form-control" disabled value="{{ $show->nama_produk }}">
               </div>
-
               <div class="form-group">
                 <label>Detail</label>
-                <textarea name="detail" class="form-control @error('detail') is-invalid @enderror" id="ckeditor" disabled>{{ old('detail', $show->detail) }}</textarea>
-                @error('detail')
-                  <span class="invalid-feedback alert-danger" role="alert"> {{ $message }} </span>
-                @enderror
+                <textarea class="form-control" rows="5" disabled>{{ $show->detail }}</textarea>
               </div>
             </div>
 
             {{-- Kanan: Foto Produk --}}
             <div class="col-md-6">
+              {{-- Foto Utama --}}
               <div class="form-group">
                 <label>Foto Utama</label><br>
-                <img src="{{ asset('storage/img-produk/' . $show->foto) }}" class="foto-preview mb-3" style="width: 100%; max-height: 300px; object-fit: cover;">
+                <img src="{{ asset('storage/img-produk/' . $show->foto) }}"
+                     class="mb-3 w-100"
+                     style="max-height:300px; object-fit:cover;">
               </div>
 
+              {{-- Foto Tambahan --}}
               <div class="form-group">
                 <label>Foto Tambahan</label>
                 <div id="foto-container">
-                  <div class="row">
-                    @foreach($show->fotoProduk as $gambar)
-                      <div class="col-md-8 mb-2">
-                        <img src="{{ asset('storage/img-produk/' . $gambar->foto) }}" width="100%" style="max-height: 200px; object-fit: cover;">
+                  @foreach($show->fotoProduk as $gambar)
+                    <div class="d-flex mb-3 align-items-start">
+                      {{-- Gambar --}}
+                      <div class="flex-fill me-2">
+                        <img src="{{ asset('storage/img-produk/' . $gambar->foto) }}"
+                             class="w-100"
+                             style="max-height:200px; object-fit:cover;">
                       </div>
-                      <div class="col-md-4 d-flex align-items-center">
-                        <form action="{{ route('backend.foto_produk.destroy', $gambar->id) }}" method="post">
+                      {{-- Tombol Hapus --}}
+                      <div>
+                        <form action="{{ route('backend.foto_produk.destroy', $gambar->id) }}"
+                              method="POST">
                           @csrf
-                          @method('delete')
-                          <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                          @method('DELETE')
+                          <button type="submit"
+                                  class="btn btn-danger btn-sm"
+                                  onclick="return confirm('Yakin hapus foto ini?')">
+                            Hapus
+                          </button>
                         </form>
                       </div>
-                    @endforeach
-                  </div>
+                    </div>
+                  @endforeach
                 </div>
-                <button type="button" class="btn btn-primary add-foto mt-2">Tambah Foto</button>
+
+                {{-- Tombol Tambah Foto --}}
+                <button type="button" class="btn btn-primary add-foto">
+                  Tambah Foto
+                </button>
               </div>
             </div>
           </div>
 
         </div>
-
         <div class="border-top">
           <div class="card-body">
-            <a href="{{ route('backend.produk.index') }}">
-              <button type="button" class="btn btn-secondary">Kembali</button>
-            </a>
+            <a href="{{ route('backend.produk.index') }}" class="btn btn-secondary">Kembali</a>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </div>
-<!-- contentAkhir -->
 @endsection
 
 @push('scripts')
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const fotoContainer = document.getElementById('foto-container');
-    const addFotoButton = document.querySelector('.add-foto');
+document.addEventListener('DOMContentLoaded', function () {
+  const fotoContainer = document.getElementById('foto-container');
+  const addBtn = document.querySelector('.add-foto');
 
-    addFotoButton.addEventListener('click', function () {
-      const fotoRow = document.createElement('div');
-      fotoRow.classList.add('form-group', 'row');
-      fotoRow.innerHTML = `
-        <form action="{{ route('backend.foto_produk.store') }}" method="post" enctype="multipart/form-data">
-          @csrf
-          <div class="col-md-12">
+  addBtn.addEventListener('click', () => {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('mb-3');
+
+    // Pindahkan tombol dari DOM dan simpan referensinya
+    const movedAddBtn = addBtn;
+    movedAddBtn.classList.remove('add-foto'); // agar tidak bind ganda
+    movedAddBtn.classList.add('btn-sm', 'mb-2');
+
+    wrapper.innerHTML = `
+      <div class="d-flex align-items-start">
+        <div class="flex-fill me-2">
+          <img src="#" class="upload-preview w-100 mb-2"
+               style="display:none; max-height:200px; object-fit:cover;">
+          <!-- Tombol Tambah Foto akan disisipkan di sini -->
+          <div class="add-btn-placeholder mb-2"></div>
+          <input type="file" name="foto_produk[]" class="form-control file-input mb-2" accept="image/*">
+          <form action="{{ route('backend.foto_produk.store') }}"
+                method="POST"
+                enctype="multipart/form-data">
+            @csrf
             <input type="hidden" name="produk_id" value="{{ $show->id }}">
-            <input type="file" name="foto_produk[]" class="form-control @error('foto_produk') is-invalid @enderror">
-            <button type="submit" class="btn btn-success mt-2">Simpan</button>
-          </div>
-        </form>
-      `;
-      fotoContainer.appendChild(fotoRow);
+            <button type="submit" class="btn btn-success btn-sm">
+              Simpan
+            </button>
+          </form>
+        </div>
+        <div>
+          <button type="button" class="btn btn-danger btn-sm remove-row">
+            Hapus
+          </button>
+        </div>
+      </div>
+    `;
+
+    fotoContainer.appendChild(wrapper);
+
+    // Sisipkan tombol ke dalam form baru
+    wrapper.querySelector('.add-btn-placeholder').appendChild(movedAddBtn);
+
+    const fileInput = wrapper.querySelector('.file-input');
+    const previewImg = wrapper.querySelector('.upload-preview');
+    const removeBtn = wrapper.querySelector('.remove-row');
+
+    fileInput.addEventListener('change', function () {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.readAsDataURL(this.files[0]);
+        reader.onload = e => {
+          previewImg.src = e.target.result;
+          previewImg.style.display = 'block';
+        };
+      }
+    });
+
+    removeBtn.addEventListener('click', () => {
+      wrapper.remove();
+      // Kembalikan tombol ke bawah jika ingin
+      fotoContainer.parentNode.appendChild(movedAddBtn);
+      movedAddBtn.classList.add('add-foto');
     });
   });
+});
 </script>
 @endpush
+
+
