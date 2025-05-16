@@ -227,6 +227,21 @@
         }
       });
     });
+
+    // fungsi preview foto
+  function previewfoto() {
+    const foto = document.querySelector('input[name="foto"]');
+    const fotoPreview = document.querySelector('.foto-preview');
+
+    fotoPreview.style.display = 'block';
+    const reader = new FileReader();
+    reader.readAsDataURL(foto.files[0]);
+
+    reader.onload = function(e) {
+      fotoPreview.src = e.target.result;
+      fotoPreview.style.width = '100px';
+    };
+  }
   </script>
 </body>
 </html>

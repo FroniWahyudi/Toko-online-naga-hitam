@@ -42,54 +42,56 @@ class ProdukController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
-    {
-        // Validasi input
-        $validatedData = $request->validate([
-            'kategori_id' => 'required',
-            'nama_produk' => 'required|max:255|unique:produk',
-            'detail' => 'required',
-            'harga' => 'required',
-            'berat' => 'required',
-            'stok' => 'required',
-            'foto' => 'required|image|mimes:jpeg,jpg,png,gif|file|max:1024',
-        ], [
-            'foto.image' => 'Format gambar gunakan file dengan ekstensi jpeg, jpg, png, atau gif.',
-            'foto.max' => 'Ukuran file gambar Maksimal adalah 1024 KB.'
-        ]);
+   public function store(Request $request)
+{
+    // Validasi input
+    $validatedData = $request->validate([
+        'kategori_id' => 'required',
+        'nama_produk' => 'required|max:255|unique:produk',
+        'detail' => 'required',
+        'harga' => 'required',
+        'berat' => 'required',
+        'stok' => 'required',
+        'foto' => 'required|image|mimes:jpeg,jpg,png,gif|file|max:1024',
+    ], [
+        'foto.image' => 'Format gambar gunakan file dengan ekstensi jpeg, jpg, png, atau gif.',
+        'foto.max' => 'Ukuran file gambar Maksimal adalah 1024 KB.'
+    ]);
 
-        $validatedData['status'] = 0; // Set default status
-        
-        // Handle file upload
-        if ($request->file('foto')) {
-            $file = $request->file('foto');
-            $extension = $file->getClientOriginalExtension();
-            $originalFileName = date('YmdHis') . '_' . uniqid() . '.' . $extension;
-            $directory = 'storage/img-produk/';
-            
-            // Simpan gambar asli
-            ImageHelper::uploadAndResize($file, $directory, $originalFileName);
-            $validatedData['foto'] = $originalFileName;
-            
-            // Buat thumbnail besar (800px)
-            $thumbnailLg = 'thumb_lg_' . $originalFileName;
-            ImageHelper::uploadAndResize($file, $directory, $thumbnailLg, 800, null);
-            
-            // Buat thumbnail medium (500x519px)
-            $thumbnailMd = 'thumb_md_' . $originalFileName;
-            ImageHelper::uploadAndResize($file, $directory, $thumbnailMd, 500, 519);
-            
-            // Buat thumbnail kecil (100x110px)
-            $thumbnailSm = 'thumb_sm_' . $originalFileName;
-            ImageHelper::uploadAndResize($file, $directory, $thumbnailSm, 100, 110);
-        }
-        
-        // Simpan data produk
-        Produk::create($validatedData);
-        
-        return redirect()->route('backend.produk.index')
-            ->with('success', 'Data berhasil tersimpan');
+    $validatedData['status'] = 0; // Set default status
+    $validatedData['user_id'] = auth()->id(); // ✅ Tambahkan user_id dari user yang login
+
+    // Handle file upload
+    if ($request->file('foto')) {
+        $file = $request->file('foto');
+        $extension = $file->getClientOriginalExtension();
+        $originalFileName = date('YmdHis') . '_' . uniqid() . '.' . $extension;
+        $directory = 'storage/img-produk/';
+
+        // Simpan gambar asli
+        ImageHelper::uploadAndResize($file, $directory, $originalFileName);
+        $validatedData['foto'] = $originalFileName;
+
+        // Buat thumbnail besar (800px)
+        $thumbnailLg = 'thumb_lg_' . $originalFileName;
+        ImageHelper::uploadAndResize($file, $directory, $thumbnailLg, 800, null);
+
+        // Buat thumbnail medium (500x519px)
+        $thumbnailMd = 'thumb_md_' . $originalFileName;
+        ImageHelper::uploadAndResize($file, $directory, $thumbnailMd, 500, 519);
+
+        // Buat thumbnail kecil (100x110px)
+        $thumbnailSm = 'thumb_sm_' . $originalFileName;
+        ImageHelper::uploadAndResize($file, $directory, $thumbnailSm, 100, 110);
     }
+
+    // Simpan data produk
+    Produk::create($validatedData);
+
+    return redirect()->route('backend.produk.index')
+        ->with('success', 'Data berhasil tersimpan');
+}
+
 
     /**
      * Display the specified resource.
