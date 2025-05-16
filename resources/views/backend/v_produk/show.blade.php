@@ -28,12 +28,11 @@
                 <input type="text" class="form-control" disabled value="{{ $show->nama_produk }}">
               </div>
               <div class="form-group">
-  <label>Detail</label>
-  <div class="form-control" style="height:auto; background-color:#e9ecef;">
-    {!! $show->detail !!}
-  </div>
-</div>
-
+                <label>Detail</label>
+                <div class="form-control" style="height:auto; background-color:#e9ecef;">
+                  {!! $show->detail !!}
+                </div>
+              </div>
             </div>
 
             {{-- Kanan: Foto Produk --}}
@@ -52,13 +51,11 @@
                 <div id="foto-container">
                   @foreach($show->fotoProduk as $gambar)
                     <div class="d-flex mb-3 align-items-start">
-                      {{-- Gambar --}}
                       <div class="flex-fill me-2">
                         <img src="{{ asset('storage/img-produk/' . $gambar->foto) }}"
                              class="w-100"
                              style="max-height:200px; object-fit:cover;">
                       </div>
-                      {{-- Tombol Hapus --}}
                       <div>
                         <form action="{{ route('backend.foto_produk.destroy', $gambar->id) }}"
                               method="POST">
@@ -99,72 +96,74 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const fotoContainer = document.getElementById('foto-container');
-  const addBtn = document.querySelector('.add-foto');
+  const addBtn        = document.querySelector('.add-foto');
 
   addBtn.addEventListener('click', () => {
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('mb-3');
+    // jika sudah ada baris aktif, abaikan
+    if (fotoContainer.querySelector('.dynamic-row')) return;
 
-    // Pindahkan tombol dari DOM dan simpan referensinya
-    const movedAddBtn = addBtn;
-    movedAddBtn.classList.remove('add-foto'); // agar tidak bind ganda
-    movedAddBtn.classList.add('btn-sm', 'mb-2');
+    // sembunyikan tombol Tambah Foto
+    addBtn.style.display = 'none';
+
+    // buat wrapper baru
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('d-flex', 'mb-3', 'align-items-start', 'dynamic-row');
 
     wrapper.innerHTML = `
-      <div class="d-flex align-items-start">
-        <div class="flex-fill me-2">
-          <img src="#" class="upload-preview w-100 mb-2"
-               style="display:none; max-height:200px; object-fit:cover;">
-          <!-- Tombol Tambah Foto akan disisipkan di sini -->
-          <div class="add-btn-placeholder mb-2"></div>
-          <input type="file" name="foto_produk[]" class="form-control file-input mb-2" accept="image/*">
-          <form action="{{ route('backend.foto_produk.store') }}"
-                method="POST"
-                enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="produk_id" value="{{ $show->id }}">
-            <button type="submit" class="btn btn-success btn-sm">
-              Simpan
-            </button>
-          </form>
-        </div>
-        <div>
-          <button type="button" class="btn btn-danger btn-sm remove-row">
-            Hapus
-          </button>
-        </div>
+      <div class="flex-fill me-2">
+        <img src="#" class="upload-preview w-100 mb-2"
+             style="display:none; max-height:200px; object-fit:cover;">
+        <input type="file" name="foto_produk[]" class="form-control mb-2 file-input" accept="image/*">
+        <div class="invalid-feedback d-block" style="display:none;"></div>
+        <form action="{{ route('backend.foto_produk.store') }}"
+              method="POST" enctype="multipart/form-data" class="d-inline-block upload-form">
+          @csrf
+          <input type="hidden" name="produk_id" value="{{ $show->id }}">
+          <button type="submit" class="btn btn-success btn-sm">Simpan</button>
+        </form>
+      </div>
+      <div>
+        <button type="button" class="btn btn-danger btn-sm btn-remove">Hapus</button>
       </div>
     `;
 
     fotoContainer.appendChild(wrapper);
 
-    // Sisipkan tombol ke dalam form baru
-    wrapper.querySelector('.add-btn-placeholder').appendChild(movedAddBtn);
+    const fileInput     = wrapper.querySelector('.file-input');
+    const previewImg    = wrapper.querySelector('.upload-preview');
+    const removeBtn     = wrapper.querySelector('.btn-remove');
+    const form          = wrapper.querySelector('.upload-form');
+    const feedbackDiv   = wrapper.querySelector('.invalid-feedback');
 
-    const fileInput = wrapper.querySelector('.file-input');
-    const previewImg = wrapper.querySelector('.upload-preview');
-    const removeBtn = wrapper.querySelector('.remove-row');
-
+    // preview gambar saat pilih file
     fileInput.addEventListener('change', function () {
-      if (this.files && this.files[0]) {
-        const reader = new FileReader();
-        reader.readAsDataURL(this.files[0]);
-        reader.onload = e => {
-          previewImg.src = e.target.result;
-          previewImg.style.display = 'block';
-        };
+      feedbackDiv.style.display = 'none';
+      feedbackDiv.textContent = '';
+
+      if (!this.files[0]) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        previewImg.src = e.target.result;
+        previewImg.style.display = 'block';
+      };
+      reader.readAsDataURL(this.files[0]);
+    });
+
+    // validasi sebelum submit: periksa ada file
+    form.addEventListener('submit', function (e) {
+      if (!fileInput.value) {
+        e.preventDefault();
+        feedbackDiv.textContent = 'Silakan pilih file gambar terlebih dahulu!';
+        feedbackDiv.style.display = 'block';
       }
     });
 
+    // tombol Hapus: hapus baris dan tampilkan kembali tombol Tambah Foto
     removeBtn.addEventListener('click', () => {
       wrapper.remove();
-      // Kembalikan tombol ke bawah jika ingin
-      fotoContainer.parentNode.appendChild(movedAddBtn);
-      movedAddBtn.classList.add('add-foto');
+      addBtn.style.display = 'inline-block';
     });
   });
 });
 </script>
 @endpush
-
-
