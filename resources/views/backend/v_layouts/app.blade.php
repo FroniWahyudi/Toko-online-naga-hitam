@@ -53,7 +53,7 @@
                             <img src="{{ asset('image/icon_univ_bsi.png') }}" alt="homepage" class="light-logo" />
                         </b>
                         <span class="logo-text">
-                            <img src="{{ asset('image/logo_text.png') }}" alt="homepage" class="light-logo" />
+                            <img src="{{ asset('image/logo_text_projek.png') }}" alt="homepage" class="light-logo" />
                         </span>
                     </a>
                     <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

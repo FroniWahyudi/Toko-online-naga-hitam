@@ -35,7 +35,7 @@
                 </div>
 
                 <!-- Form Login -->
-                <form class="form-horizontal m-t-20" id="form-login" action="{{ route('backend.login.submit') }}" method="POST">
+                <form class="form-horizontal m-t-20" id="form-login" action="{{ route('backend.login') }}" method="POST">
                     @csrf
                     <div class="row p-b-30">
                         <div class="col-12">
