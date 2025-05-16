@@ -143,10 +143,10 @@
 
 @push('scripts')
   {{-- Load CKEditor --}}
-  <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+     document.addEventListener('DOMContentLoaded', () => {
       const el = document.querySelector('#ckeditor');
       if (el) {
         ClassicEditor

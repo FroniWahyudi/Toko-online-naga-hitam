@@ -28,9 +28,12 @@
                 <input type="text" class="form-control" disabled value="{{ $show->nama_produk }}">
               </div>
               <div class="form-group">
-                <label>Detail</label>
-                <textarea class="form-control" rows="5" disabled>{{ $show->detail }}</textarea>
-              </div>
+  <label>Detail</label>
+  <div class="form-control" style="height:auto; background-color:#e9ecef;">
+    {!! $show->detail !!}
+  </div>
+</div>
+
             </div>
 
             {{-- Kanan: Foto Produk --}}
