@@ -248,6 +248,10 @@
                 console.error(error);
             });
     </script>
+
+    <!-- sebelum penutup </body> -->
+@stack('scripts')
+
 </body>
 
 </html>
