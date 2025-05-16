@@ -18,7 +18,7 @@ Route::post('backend/login', [LoginController::class, 'authenticateBackend'])->n
 Route::post('backend/logout', [LoginController::class, 'logoutBackend'])->name('backend.logout');
 
 // 🏠 Beranda
-Route::get('backend/beranda', [BerandaController::class, 'berandaBackend'])
+Route::get('backend/beranda', [BerandaController::class, 'index'])
     ->name('backend.beranda')
     ->middleware('auth');
 
