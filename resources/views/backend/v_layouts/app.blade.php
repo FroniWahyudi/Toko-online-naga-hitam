@@ -243,7 +243,7 @@
   
 
     <!-- sebelum penutup </body> -->
-@stack('scripts')
+    @stack('scripts')
 
 </body>
 
