@@ -98,9 +98,12 @@ class ProdukController extends Controller
      * @param  string  $id
      */
     public function show(string $id)
-    {
-        // Implementasi bisa ditambahkan di sini
-    }
+{
+$produk = Produk::with('fotoProduk')->findOrFail($id);
+$kategori = Kategori::orderBy('nama_kategori', 'asc')->get(); return view('backend.v_produk.show', [
+'judul' => 'Detail Produk', 'show' => $produk,
+'kategori' => $kategori ]);
+}
 
     /**
      * Show the form for editing the specified resource.
